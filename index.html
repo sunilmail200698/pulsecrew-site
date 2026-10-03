@@ -736,7 +736,14 @@
         </div>
         <div class="field">
           <label for="typeOfNurseRequired">Type of nurse required</label>
-          <input type="text" id="typeOfNurseRequired" name="typeOfNurseRequired" placeholder="e.g. ICU, OT, ER" required>
+          <select id="typeOfNurseRequired" name="typeOfNurseRequired" required>
+            <option value="">Select type of nurse</option>
+            <option value="General Nurse (RGN)">General Nurse (RGN)</option>
+            <option value="Paediatric Nurse">Paediatric Nurse</option>
+            <option value="ICU/ITU">ICU/ITU</option>
+            <option value="A&amp;E/ED (Emergency Department)">A&amp;E/ED (Emergency Department)</option>
+            <option value="OT">OT</option>
+          </select>
         </div>
         <div class="field wide">
           <label for="hospitalWard">Ward</label>
