@@ -246,6 +246,7 @@
   .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px 20px; }
   @media (max-width:700px){ .form-grid{ grid-template-columns:1fr; } }
   .field{ display:flex; flex-direction:column; gap:7px; }
+  .field.wide{ grid-column:1 / -1; }
   .field label{ font-size:.86rem; font-weight:700; color:var(--ink-navy); }
   .field input,.field select{
     font:inherit; font-size:.95rem; color:var(--ink); background:var(--surface);
@@ -736,6 +737,10 @@
         <div class="field">
           <label for="typeOfNurseRequired">Type of nurse required</label>
           <input type="text" id="typeOfNurseRequired" name="typeOfNurseRequired" placeholder="e.g. ICU, OT, ER" required>
+        </div>
+        <div class="field wide">
+          <label for="hospitalWard">Ward</label>
+          <input type="text" id="hospitalWard" name="ward" maxlength="100" placeholder="e.g. ICU, Ward 3B, Maternity" required>
         </div>
         <div class="field">
           <label for="shiftDate">Shift date</label>
