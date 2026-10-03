@@ -860,7 +860,14 @@
         </div>
         <div class="field">
           <label for="specialty">Specialty</label>
-          <input type="text" id="specialty" name="specialty" placeholder="e.g. ICU, OT, ER" required>
+          <select id="specialty" name="specialty" required>
+            <option value="">Select specialty</option>
+            <option value="General Nurse (RGN)">General Nurse (RGN)</option>
+            <option value="Paediatric Nurse">Paediatric Nurse</option>
+            <option value="ICU/ITU">ICU/ITU</option>
+            <option value="A&amp;E/ED (Emergency Department)">A&amp;E/ED (Emergency Department)</option>
+            <option value="OT">OT</option>
+          </select>
         </div>
         <div class="field">
           <label for="qualification">Highest nursing qualification</label>
