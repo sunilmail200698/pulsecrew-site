@@ -839,6 +839,18 @@
           <input type="text" id="fullName" name="fullName" required>
         </div>
         <div class="field">
+          <label for="nurseDob">Date of birth</label>
+          <input type="date" id="nurseDob" name="dateOfBirth" min="1930-01-01" required>
+        </div>
+        <div class="field">
+          <label for="nurseGender">Gender</label>
+          <select id="nurseGender" name="gender" required>
+            <option value="">Select gender</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="nursePhone">Phone number (+91)</label>
           <input type="tel" id="nursePhone" name="phoneNumber" required>
         </div>
@@ -1073,6 +1085,15 @@
       });
     });
   }
+
+  // Date of birth: the picker only offers dates that make the applicant at least 18 (the server checks this too).
+  (function(){
+    var dob = document.getElementById('nurseDob');
+    if (!dob) return;
+    var d = new Date();
+    d.setFullYear(d.getFullYear() - 18);
+    dob.max = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  })();
 
   wireForm('hospitalForm', 'hospital', "Request received — we're matching you with a verified nurse now.");
   wireForm('nurseForm', 'nurse', "Application received — we'll verify your credentials and be in touch.");
