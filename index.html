@@ -1536,4 +1536,63 @@
     .btn:not(:disabled):hover, .btn:not(:disabled):active{ transform:none !important; }
   }
 </style>
+
+<!-- ===== Header navigation polish (decorative pill + scroll-spy; links themselves are not modified) ===== -->
+<style id="fx-nav-style">
+  .fx-navpill{ position:absolute; left:0; top:50%; height:36px; width:60px; border-radius:9999px; z-index:0; opacity:0; pointer-events:none !important;
+    background:linear-gradient(180deg,var(--accent-soft),rgba(219,234,254,.8)); border:1px solid rgba(37,99,235,.18); box-shadow:0 4px 14px rgba(37,99,235,.12);
+    transform:translate(var(--x,0px),-50%); transition:transform .38s cubic-bezier(.2,.8,.2,1), width .38s cubic-bezier(.2,.8,.2,1), opacity .2s ease; }
+  html.fx .nav-links{ position:relative; }
+  html.fx .nav-links a{ position:relative; z-index:1; transition:color .2s ease; }
+  html.fx .nav-links a::after{ display:none; }                /* the pill replaces the underline */
+  html.fx .nav-links[data-active="#top"] a[href="#top"],
+  html.fx .nav-links[data-active="#hospitals"] a[href="#hospitals"],
+  html.fx .nav-links[data-active="#nurses"] a[href="#nurses"],
+  html.fx .nav-links[data-active="#about"] a[href="#about"],
+  html.fx .nav-links[data-active="#faq"] a[href="#faq"]{ color:var(--accent); }
+
+  /* header tightens and lifts once you scroll */
+  header .nav{ transition:padding .25s ease; }
+  header .logo-icon{ transition:height .25s ease; }
+  header.fx-scrolled{ box-shadow:0 10px 32px rgba(15,23,42,.10); }
+  header.fx-scrolled .nav{ padding-block:7px; }
+  header.fx-scrolled .logo-icon{ height:27px; }
+  @media (prefers-reduced-motion: reduce){ .fx-navpill, header .nav, header .logo-icon{ transition:none !important; } }
+</style>
+<script id="fx-nav-script">
+(function(){
+  try{
+    var root=document.documentElement; if(!root.classList.contains('fx')) return;
+    var nav=document.querySelector('.nav-links'), header=document.querySelector('header'); if(!nav) return;
+    var links=Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+    var pill=document.createElement('span'); pill.className='fx-navpill'; pill.setAttribute('aria-hidden','true'); nav.insertBefore(pill,nav.firstChild);
+    var active=null;
+    function place(a){
+      if(!a || getComputedStyle(nav).display==='none'){ pill.style.opacity=0; return; }
+      var nr=nav.getBoundingClientRect(), r=a.getBoundingClientRect(); if(!r.width){ pill.style.opacity=0; return; }
+      pill.style.width=(r.width+22)+'px'; pill.style.setProperty('--x',(r.left-nr.left-11)+'px'); pill.style.opacity=1;
+    }
+    function target(a){ var id=a.getAttribute('href'); return id==='#top' ? document.querySelector('.hero') : document.querySelector(id); }
+    var tick=false;
+    function spy(){
+      tick=false;
+      if(header) header.classList.toggle('fx-scrolled', scrollY>24);
+      var cur=null;
+      if(!document.body.classList.contains('page-active')){
+        links.forEach(function(a){ var t=target(a); if(t && t.getBoundingClientRect().top<=170) cur=a; });
+        if(!cur && scrollY<400) cur=links[0];
+      }
+      if(cur!==active){ active=cur; if(cur) nav.setAttribute('data-active',cur.getAttribute('href')); else nav.removeAttribute('data-active'); place(active); }
+    }
+    addEventListener('scroll',function(){ if(!tick){ tick=true; requestAnimationFrame(spy); } },{passive:true});
+    addEventListener('resize',function(){ place(active); });
+    links.forEach(function(a){ a.addEventListener('pointerenter',function(){ place(a); }); a.addEventListener('focus',function(){ place(a); }); });
+    nav.addEventListener('pointerleave',function(){ place(active); });
+    nav.addEventListener('focusout',function(){ place(active); });
+    document.addEventListener('click',function(){ setTimeout(spy,60); setTimeout(spy,700); });   /* after a nav click / page switch */
+    spy(); setTimeout(function(){ place(active); },600);
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ place(active); });
+  }catch(err){}
+})();
+</script>
 </body></html>
