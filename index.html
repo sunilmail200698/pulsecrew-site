@@ -1114,51 +1114,88 @@
 <!-- ===== Immersive effects (additive; purely visual, never touches links/buttons/forms) ===== -->
 <style id="fx-style">
   /* decorative layers never intercept clicks */
-  .fx-deco, .fx-deco *, .fx-progress{ pointer-events:none !important; }
+  .fx-deco, .fx-deco *, .fx-progress, .cta-band::before{ pointer-events:none !important; }
 
   /* scroll progress bar */
   .fx-progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:60; transform-origin:0 50%; transform:scaleX(0);
-    background:linear-gradient(90deg,#2c8cc6,var(--accent),#182c56); }
+    background:linear-gradient(90deg,#2c8cc6,#22d3ee,#2563eb); }
 
-  /* hero ECG line + glow */
+  /* ---------- dark immersive hero ---------- */
   .fx-deco{ position:absolute; inset:0; z-index:0; overflow:hidden; }
   .hero .hero-grid{ position:relative; z-index:1; }
-  .fx-ecg{ position:absolute; left:0; right:0; bottom:18px; width:100%; height:110px; opacity:.45; }
-  .fx-ecg path{ fill:none; stroke:var(--accent); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;
-    stroke-dasharray:1400; stroke-dashoffset:1400; animation:fxEcg 5.5s linear infinite; filter:drop-shadow(0 0 6px rgba(37,99,235,.45)); }
+  .hero.fx-dark{ background:
+      radial-gradient(900px 520px at 80% -10%, rgba(37,99,235,.38), transparent 62%),
+      radial-gradient(700px 460px at 8% 110%, rgba(34,211,238,.18), transparent 60%),
+      linear-gradient(165deg,#081326 0%,#0e2347 55%,#102b52 100%); }
+  .hero.fx-dark h1{ color:#fff; }
+  .hero.fx-dark .hero-sub{ color:#cbd5e1; }
+  .hero.fx-dark .badge-chip{ background:rgba(255,255,255,.09); color:#bfdbfe; border:1px solid rgba(255,255,255,.16); backdrop-filter:blur(6px); }
+  .hero.fx-dark .trust-item{ color:#e2e8f0; }
+  .hero.fx-dark .btn-outline{ color:#fff; border-color:rgba(255,255,255,.4); }
+  .hero.fx-dark .btn-outline:hover{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.7); }
+  .hero.fx-dark .btn-primary{ box-shadow:0 0 0 0 rgba(96,165,250,.55); animation:fxBtnGlow 2.8s ease-out infinite; }
+  @keyframes fxBtnGlow{ 70%{ box-shadow:0 0 0 14px rgba(96,165,250,0); } 100%{ box-shadow:0 0 0 0 rgba(96,165,250,0); } }
+  @supports (background-clip:text) or (-webkit-background-clip:text){
+    .hero.fx-dark .accent{ background:linear-gradient(90deg,#60a5fa,#22d3ee,#93c5fd,#60a5fa); background-size:250% auto;
+      -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; animation:fxShine 7s linear infinite; }
+  }
+  @keyframes fxShine{ to{ background-position:250% center; } }
+
+  .fx-net{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .fx-ecg{ position:absolute; left:0; right:0; bottom:14px; width:100%; height:110px; opacity:.55; }
+  .fx-ecg path{ fill:none; stroke:#60a5fa; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:1400; stroke-dashoffset:1400; animation:fxEcg 5.5s linear infinite; filter:drop-shadow(0 0 7px rgba(96,165,250,.8)); }
   @keyframes fxEcg{ 0%{stroke-dashoffset:1400} 55%{stroke-dashoffset:0} 100%{stroke-dashoffset:-1400} }
-  .fx-glow{ position:absolute; width:520px; height:520px; border-radius:50%; filter:blur(70px); opacity:.35;
-    background:radial-gradient(circle,var(--accent-soft-2),transparent 70%); animation:fxDrift 14s ease-in-out infinite alternate; }
-  .fx-glow.a{ left:-140px; top:-120px; } .fx-glow.b{ right:-160px; bottom:-200px; animation-delay:-6s; }
-  @keyframes fxDrift{ to{ transform:translate(40px,30px) scale(1.12); } }
 
   /* floating status chips (wide screens only) */
   .fx-chip{ position:absolute; display:flex; align-items:center; gap:8px; padding:9px 14px; border-radius:var(--radius-pill);
-    background:rgba(255,255,255,.92); border:1px solid var(--border-soft); box-shadow:0 10px 30px rgba(15,23,42,.10);
-    font-size:.8rem; font-weight:600; color:var(--ink-navy); white-space:nowrap; animation:fxFloat 6s ease-in-out infinite; }
-  .fx-chip i{ width:8px; height:8px; border-radius:50%; background:var(--good); box-shadow:0 0 0 0 rgba(22,163,74,.5); animation:fxPing 2s infinite; }
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    box-shadow:0 12px 34px rgba(2,8,23,.35); font-size:.8rem; font-weight:600; color:#e2e8f0; white-space:nowrap; animation:fxFloat 6s ease-in-out infinite; }
+  .fx-chip i{ width:8px; height:8px; border-radius:50%; background:#34d399; animation:fxPing 2s infinite; }
   .fx-chip.c1{ left:5%;  top:22%; } .fx-chip.c2{ right:5%; top:30%; animation-delay:-1.5s; }
-  .fx-chip.c3{ left:8%;  top:66%; animation-delay:-3s; }   .fx-chip.c4{ right:7%; top:72%; animation-delay:-4.5s; }
+  .fx-chip.c3{ left:8%;  top:64%; animation-delay:-3s; }   .fx-chip.c4{ right:7%; top:70%; animation-delay:-4.5s; }
   .fx-chip.c5{ left:50%; top:6%; margin-left:-90px; animation-delay:-2s; }
   @keyframes fxFloat{ 50%{ transform:translateY(-12px); } }
-  @keyframes fxPing{ 70%{ box-shadow:0 0 0 9px rgba(22,163,74,0); } 100%{ box-shadow:0 0 0 0 rgba(22,163,74,0); } }
+  @keyframes fxPing{ 0%{ box-shadow:0 0 0 0 rgba(52,211,153,.6); } 70%,100%{ box-shadow:0 0 0 9px rgba(52,211,153,0); } }
   @media (max-width:1100px){ .fx-chip{ display:none; } }
 
-  /* scroll reveal (only armed once JS has added .fx to <html>) */
-  html.fx .fx-reveal{ opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  /* ---------- scroll reveal (armed once JS adds .fx to <html>) ---------- */
+  html.fx .fx-reveal{ opacity:0; transform:translateY(32px) scale(.985); transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
     transition-delay:var(--fx-d,0ms); }
   html.fx .fx-reveal.fx-in{ opacity:1; transform:none; }
 
-  /* gentle hover lift on cards (cards are not links) */
-  .feature-card, .compare-card, .step{ transition:transform .25s ease, box-shadow .25s ease; }
-  @media (hover:hover){ .feature-card:hover, .compare-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(15,23,42,.12); } }
+  /* ---------- cards: cursor spotlight + lift ---------- */
+  .feature-card, .compare-card, .step{ transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  html.fx .feature-card, html.fx .compare-card.old{
+    background-image:radial-gradient(300px circle at var(--mx,50%) var(--my,-60%), rgba(37,99,235,.12), transparent 70%); }
+  html.fx .compare-card.new{ background-image:radial-gradient(320px circle at var(--mx,50%) var(--my,-60%), rgba(96,165,250,.22), transparent 70%); }
+  @media (hover:hover){
+    .feature-card:hover, .compare-card:hover{ transform:translateY(-6px); box-shadow:0 20px 44px rgba(15,23,42,.14); }
+    .feature-card:hover{ border-color:rgba(37,99,235,.45); }
+  }
+  html.fx .feature-card:hover .feature-icon{ animation:fxIcon .6s ease; }
+  @keyframes fxIcon{ 40%{ transform:scale(1.18) rotate(-6deg); } }
+
+  /* ---------- how it works: flowing connectors, pulsing step numbers ---------- */
+  html.fx .step.fx-in:not(:last-child)::after{ animation:fxFlow 1s linear infinite; }
+  @keyframes fxFlow{ to{ background-position:12px 0; } }
+  html.fx .step.fx-in .step-num{ animation:fxRing 2.6s ease-out 1; }
+  @keyframes fxRing{ 0%{ box-shadow:0 0 0 0 rgba(37,99,235,.55); } 80%,100%{ box-shadow:0 0 0 16px rgba(37,99,235,0); } }
+
+  /* ---------- closing call-to-action: slow aurora ---------- */
+  html.fx .cta-band{ position:relative; overflow:hidden; }
+  html.fx .cta-band::before{ content:""; position:absolute; inset:-60%; z-index:0;
+    background:conic-gradient(from 0deg at 50% 50%, rgba(37,99,235,.45), rgba(34,211,238,.22), rgba(24,44,86,0) 40%, rgba(44,140,198,.35), rgba(37,99,235,.45));
+    filter:blur(90px); animation:fxSpin 28s linear infinite; }
+  html.fx .cta-band > .wrap{ position:relative; z-index:1; }
+  @keyframes fxSpin{ to{ transform:rotate(360deg); } }
 
   /* hero entrance after the loader */
-  html.fx .hero-grid > *{ opacity:0; transform:translateY(22px); }
-  html.fx.fx-go .hero-grid > *{ opacity:1; transform:none; transition:opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); transition-delay:calc(var(--i,0) * 110ms); }
+  html.fx .hero-grid > *{ opacity:0; transform:translateY(24px); }
+  html.fx.fx-go .hero-grid > *{ opacity:1; transform:none; transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); transition-delay:calc(var(--i,0) * 120ms); }
 
   @media (prefers-reduced-motion: reduce){
-    .fx-ecg path, .fx-glow, .fx-chip, .fx-chip i{ animation:none !important; }
+    .fx-ecg path, .fx-chip, .fx-chip i{ animation:none !important; }
     .fx-ecg path{ stroke-dashoffset:0; }
     .feature-card, .compare-card, .step{ transition:none; }
   }
@@ -1170,11 +1207,14 @@
     var root = document.documentElement;
     var hero = document.querySelector('.hero');
 
-    /* decorative hero layer */
+    if (reduce || !('IntersectionObserver' in window)) return;   /* no motion: page stays exactly as it was */
+
+    /* ---- hero layer: network canvas, ECG line, chips ---- */
+    var canvas = null;
     if (hero && !hero.querySelector('.fx-deco')){
       var d = document.createElement('div'); d.className='fx-deco'; d.setAttribute('aria-hidden','true');
       d.innerHTML =
-        '<span class="fx-glow a"></span><span class="fx-glow b"></span>'+
+        '<canvas class="fx-net"></canvas>'+
         '<svg class="fx-ecg" viewBox="0 0 1200 180" preserveAspectRatio="none"><path d="M0 100 L330 100 L370 100 L395 60 L420 140 L450 20 L485 165 L515 100 L1200 100"/></svg>'+
         '<span class="fx-chip c1"><i></i>ICU nurse matched</span>'+
         '<span class="fx-chip c2"><i></i>GNC verified</span>'+
@@ -1182,17 +1222,74 @@
         '<span class="fx-chip c4"><i></i>ER cover confirmed</span>'+
         '<span class="fx-chip c5"><i></i>Live matching</span>';
       hero.insertBefore(d, hero.firstChild);
+      hero.classList.add('fx-dark');
+      canvas = d.querySelector('canvas');
     }
 
-    if (reduce || !('IntersectionObserver' in window)) return;   /* no motion: page stays exactly as it was */
+    if (canvas){
+      var ctx = canvas.getContext('2d'), W=0, H=0, dpr=1, nodes=[], pulses=[], mouse={x:-999,y:-999}, run=false, vis=true, last=0, spawn=0;
+      function size(){
+        dpr = Math.min(window.devicePixelRatio||1, 2);
+        W = hero.clientWidth; H = hero.clientHeight;
+        canvas.width = W*dpr; canvas.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+        var n = Math.max(26, Math.min(78, Math.round(W*H/15000)));
+        nodes = [];
+        for (var i=0;i<n;i++) nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,r:1.2+Math.random()*1.6});
+      }
+      var LINK = 150;
+      function frame(t){
+        if (!run) return;
+        var dt = Math.min(48, t-last||16); last = t;
+        ctx.clearRect(0,0,W,H);
+        var i,j,a,b,dx,dy,dist;
+        for (i=0;i<nodes.length;i++){ a=nodes[i]; a.x+=a.vx*dt/16; a.y+=a.vy*dt/16;
+          if(a.x<0||a.x>W) a.vx*=-1; if(a.y<0||a.y>H) a.vy*=-1; }
+        ctx.lineWidth=1;
+        for (i=0;i<nodes.length;i++){ a=nodes[i];
+          for (j=i+1;j<nodes.length;j++){ b=nodes[j]; dx=a.x-b.x; dy=a.y-b.y; dist=dx*dx+dy*dy;
+            if (dist<LINK*LINK){ ctx.strokeStyle='rgba(147,197,253,'+(0.22*(1-Math.sqrt(dist)/LINK))+')';
+              ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } }
+          dx=a.x-mouse.x; dy=a.y-mouse.y; dist=Math.sqrt(dx*dx+dy*dy);
+          if (dist<190){ ctx.strokeStyle='rgba(34,211,238,'+(0.5*(1-dist/190))+')'; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke();
+            a.x+=dx*.0009*dt; a.y+=dy*.0009*dt; } }
+        ctx.fillStyle='rgba(191,219,254,.85)';
+        for (i=0;i<nodes.length;i++){ a=nodes[i]; ctx.beginPath(); ctx.arc(a.x,a.y,a.r,0,6.283); ctx.fill(); }
+        /* "shift matched" pulses travelling along links */
+        spawn+=dt; if (spawn>650 && pulses.length<9){ spawn=0;
+          a=nodes[(Math.random()*nodes.length)|0];
+          for (j=0;j<nodes.length;j++){ b=nodes[j]; dx=a.x-b.x; dy=a.y-b.y; if(b!==a && dx*dx+dy*dy<LINK*LINK){ pulses.push({a:a,b:b,p:0}); break; } } }
+        for (i=pulses.length-1;i>=0;i--){ var p=pulses[i]; p.p+=dt/700; if(p.p>=1){ pulses.splice(i,1); continue; }
+          var x=p.a.x+(p.b.x-p.a.x)*p.p, y=p.a.y+(p.b.y-p.a.y)*p.p;
+          var g=ctx.createRadialGradient(x,y,0,x,y,12); g.addColorStop(0,'rgba(52,211,153,.95)'); g.addColorStop(1,'rgba(52,211,153,0)');
+          ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,12,0,6.283); ctx.fill(); }
+        requestAnimationFrame(frame);
+      }
+      function start(){ if(!run && vis && !document.hidden){ run=true; last=0; requestAnimationFrame(frame); } }
+      function stop(){ run=false; }
+      size();
+      if (window.ResizeObserver) new ResizeObserver(function(){ size(); }).observe(hero); else addEventListener('resize', size);
+      new IntersectionObserver(function(es){ vis=es[0].isIntersecting; vis?start():stop(); }).observe(hero);
+      document.addEventListener('visibilitychange', function(){ document.hidden?stop():start(); });
+      hero.addEventListener('pointermove', function(e){ var r=hero.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top; }, {passive:true});
+      hero.addEventListener('pointerleave', function(){ mouse.x=mouse.y=-999; });
+      start();
+    }
 
-    /* progress bar */
+    /* ---- progress bar ---- */
     var bar = document.createElement('div'); bar.className='fx-progress'; bar.setAttribute('aria-hidden','true'); document.body.appendChild(bar);
     var ticking=false;
     function upd(){ var h=document.documentElement.scrollHeight-innerHeight; bar.style.transform='scaleX('+(h>0?Math.min(1,scrollY/h):0)+')'; ticking=false; }
     addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(upd);} }, {passive:true}); upd();
 
-    /* scroll reveal targets: content blocks only, never buttons/links/forms */
+    /* ---- card spotlight follows the cursor ---- */
+    if (window.matchMedia && matchMedia('(hover:hover)').matches){
+      document.addEventListener('pointermove', function(e){
+        var c = e.target.closest && e.target.closest('.feature-card,.compare-card'); if(!c) return;
+        var r=c.getBoundingClientRect(); c.style.setProperty('--mx',(e.clientX-r.left)+'px'); c.style.setProperty('--my',(e.clientY-r.top)+'px');
+      }, {passive:true});
+    }
+
+    /* ---- scroll reveal: content blocks only, never buttons/links/forms ---- */
     var sel = 'main > section:not(.site-page):not(.hero) .section-head, .compare-card, .feature-card, .step, .faq-item, .section-cta, .phone, .compliance-wrap > *, #about .wrap > *, .cta-band .wrap > *';
     var els = Array.prototype.slice.call(document.querySelectorAll(sel));
     var io = new IntersectionObserver(function(es){
@@ -1200,11 +1297,11 @@
     }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
     els.forEach(function(el){
       var sib = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
-      el.style.setProperty('--fx-d', Math.min(sib,5)*90+'ms');
+      el.style.setProperty('--fx-d', Math.min(sib,5)*100+'ms');
       el.classList.add('fx-reveal'); io.observe(el);
     });
 
-    /* hero entrance */
+    /* ---- hero entrance ---- */
     var kids = hero ? hero.querySelectorAll('.hero-grid > *') : [];
     Array.prototype.forEach.call(kids, function(k,i){ k.style.setProperty('--i', i); });
     root.classList.add('fx');
