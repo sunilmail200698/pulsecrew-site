@@ -1556,4 +1556,87 @@
 
   @media (prefers-reduced-motion: reduce){ header::after, header .logo:hover .logo-icon{ animation:none; } .nav-links a, .nav-links a::after{ transition:none; } }
 </style>
+
+<!-- ===== Immersive effects, part 3: ticker, dark compliance panel, headline wipes, cursor light, floating crosses (additive) ===== -->
+<style id="fx3-style">
+  .fx-ticker, .fx-glow-cursor, .fx-cross{ pointer-events:none !important; }
+
+  /* ---------- scrolling ticker band ---------- */
+  .fx-ticker{ overflow:hidden; padding-block:clamp(20px,3vw,34px); background:var(--surface); border-block:1px solid var(--border-soft);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+  .fx-ticker-track{ display:flex; width:max-content; animation:fxTicker 38s linear infinite; }
+  .fx-ticker-set{ display:flex; align-items:center; flex:none; }
+  .fx-ticker-item{ font-family:var(--fx-head,'Sora',sans-serif); font-weight:700; font-size:clamp(1.5rem,3.2vw,2.7rem); letter-spacing:-0.03em; white-space:nowrap; padding-inline:clamp(18px,2.4vw,34px);
+    color:transparent; -webkit-text-stroke:1.4px rgba(37,99,235,.55); }
+  .fx-ticker-item.f{ -webkit-text-stroke:0; background:linear-gradient(90deg,#1d4ed8,#22d3ee); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .fx-ticker-dot{ flex:none; width:12px; height:12px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#7dd3fc,#2563eb); box-shadow:0 0 14px rgba(37,99,235,.55); }
+  @keyframes fxTicker{ to{ transform:translateX(-50%); } }
+
+  /* ---------- compliance: dark immersive panel ---------- */
+  #compliance.fx-dark{ position:relative; overflow:hidden; color:#e2e8f0;
+    background:radial-gradient(700px 420px at 90% 10%, rgba(37,99,235,.34), transparent 62%), radial-gradient(560px 380px at 0% 100%, rgba(34,211,238,.16), transparent 60%), linear-gradient(165deg,#081326 0%,#0e2347 60%,#102b52 100%); }
+  #compliance.fx-dark .eyebrow{ color:#93c5fd; }
+  #compliance.fx-dark h2{ color:#fff; }
+  #compliance.fx-dark p{ color:#cbd5e1; }
+  #compliance.fx-dark .check-list p{ color:#e2e8f0; }
+  #compliance.fx-dark .shield-wrap circle:first-of-type{ fill:rgba(96,165,250,.14); }
+  #compliance.fx-dark .shield-wrap svg{ filter:drop-shadow(0 24px 48px rgba(37,99,235,.55)); }
+  #compliance.fx-dark .fx-ring{ border-color:rgba(147,197,253,.5); }
+  #compliance.fx-dark .check-badge{ box-shadow:0 0 14px rgba(37,99,235,.6); }
+
+  /* ---------- headline wipe-in ---------- */
+  html.fx .section-head.fx-reveal h2, html.fx .compliance-wrap > .fx-reveal h2{ clip-path:inset(-12% 100% -12% -2%); transition:clip-path 1s cubic-bezier(.2,.7,.2,1) .15s; }
+  html.fx .section-head.fx-in h2, html.fx .compliance-wrap > .fx-in h2{ clip-path:inset(-12% -4% -12% -2%); }
+
+  /* ---------- soft light that trails the cursor ---------- */
+  .fx-glow-cursor{ position:fixed; left:0; top:0; width:460px; height:460px; margin:-230px 0 0 -230px; border-radius:50%; z-index:5; opacity:0; transition:opacity .4s ease;
+    background:radial-gradient(circle, rgba(37,99,235,.13), rgba(34,211,238,.05) 45%, transparent 70%); will-change:transform; }
+  .fx-glow-cursor.on{ opacity:1; }
+
+  /* ---------- floating medical crosses in section backgrounds ---------- */
+  .fx-cross{ position:absolute; z-index:0; width:var(--s,22px); height:var(--s,22px); color:#2563eb; opacity:.22; animation:fxCross var(--d,14s) ease-in-out infinite; animation-delay:var(--dl,0s); }
+  @keyframes fxCross{ 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(-26px) rotate(90deg); } }
+
+  @media (prefers-reduced-motion: reduce){ .fx-ticker-track, .fx-cross{ animation:none !important; } }
+</style>
+<script id="fx3-script">
+(function(){
+  try{
+    var root=document.documentElement; if(!root.classList.contains('fx')) return;
+    var $=function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+    /* ---- ticker after "How it works" (every phrase is a claim already on this page) ---- */
+    var steps=document.querySelector('.steps'), host=steps && steps.closest('section');
+    if(host && !document.querySelector('.fx-ticker')){
+      var words=['Real-time matching','GNC-verified nurses','ICU · OT · ER','One flat per-shift fee','No hidden markups','Compliance logged automatically'];
+      var set='<div class="fx-ticker-set">'+words.map(function(w,i){ return '<span class="fx-ticker-item'+(i%2?' f':'')+'">'+w+'</span><span class="fx-ticker-dot"></span>'; }).join('')+'</div>';
+      var t=document.createElement('div'); t.className='fx-ticker'; t.setAttribute('aria-hidden','true');
+      t.innerHTML='<div class="fx-ticker-track">'+set+set+'</div>';
+      host.parentNode.insertBefore(t, host.nextSibling);
+    }
+
+    /* ---- compliance panel goes dark ---- */
+    var comp=document.getElementById('compliance'); if(comp) comp.classList.add('fx-dark');
+
+    /* ---- cursor light (mouse devices only) ---- */
+    if(window.matchMedia && matchMedia('(hover:hover)').matches){
+      var g=document.createElement('div'); g.className='fx-glow-cursor'; g.setAttribute('aria-hidden','true'); document.body.appendChild(g);
+      var tx=0,ty=0,x=0,y=0,run=false;
+      function loop(){ x+=(tx-x)*.14; y+=(ty-y)*.14; g.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px)'; if(Math.abs(tx-x)>.3||Math.abs(ty-y)>.3) requestAnimationFrame(loop); else run=false; }
+      document.addEventListener('pointermove',function(e){ tx=e.clientX; ty=e.clientY; g.classList.add('on'); if(!run){ run=true; requestAnimationFrame(loop); } },{passive:true});
+      document.addEventListener('pointerleave',function(){ g.classList.remove('on'); });
+    }
+
+    /* ---- floating crosses ---- */
+    var svg='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+    var spots=[['l',4,12,26,15,0],['r',5,34,18,12,-3],['l',9,62,30,17,-6],['r',7,80,22,13,-2],['l',3,90,16,11,-8]];
+    ['hospitals','nurses','about','faq'].forEach(function(id){
+      var sec=document.getElementById(id); if(!sec) return;
+      spots.forEach(function(sp){ var c=document.createElement('span'); c.className='fx-cross'; c.setAttribute('aria-hidden','true'); c.innerHTML=svg;
+        c.style[sp[0]==='l'?'left':'right']=sp[1]+'%'; c.style.top=sp[2]+'%'; c.style.setProperty('--s',sp[3]+'px'); c.style.setProperty('--d',sp[4]+'s'); c.style.setProperty('--dl',sp[5]+'s'); sec.insertBefore(c,sec.firstChild); });
+      sec.classList.add('fx-has-orb');
+    });
+  }catch(err){}
+})();
+</script>
 </body></html>
