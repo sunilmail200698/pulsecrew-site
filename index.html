@@ -1702,4 +1702,39 @@
   }catch(err){}
 })();
 </script>
+
+<!-- ===== Hospitals / Nurses sections: own colour identity (B) + animated icons (C). CSS only; no markup, link or handler is touched ===== -->
+<style id="fx-sections-style">
+  /* ---------- B: Nurses get a teal/emerald identity; Hospitals stay blue ---------- */
+  #nurses.section-tint{ background:radial-gradient(820px 380px at 8% 0%, rgba(20,184,166,.16), transparent 60%), radial-gradient(640px 320px at 100% 100%, rgba(16,185,129,.12), transparent 60%), linear-gradient(180deg,#f0fdfa,#ecfdf5); }
+  #nurses .eyebrow{ color:#0f766e; }
+  #nurses .feature-icon{ background:#ccfbf1; color:#0f766e; }
+  html.fx #nurses .feature-card{ background-image:radial-gradient(300px circle at var(--mx,50%) var(--my,-60%), rgba(20,184,166,.17), transparent 70%); }
+  #nurses .feature-card:hover{ border-color:rgba(13,148,136,.55); }
+  html.fx #nurses .fx-reveal.fx-done.fx-tilting{ box-shadow:0 22px 48px rgba(13,148,136,.22); }
+  html.fx #nurses .feature-card.fx-tilting .feature-icon{ background:#0d9488; color:#fff; }
+  #nurses .btn-primary{ background-image:linear-gradient(135deg,#0f766e 0%,#0d9488 45%,#14b8a6 100%); box-shadow:0 8px 20px rgba(13,148,136,.30); }
+  #nurses .btn-primary:not(:disabled):hover{ box-shadow:0 12px 28px rgba(13,148,136,.45); }
+  #nurses .btn-primary:not(:disabled):active{ box-shadow:0 3px 10px rgba(13,148,136,.28); }
+  #nurses .btn-primary:focus-visible{ outline-color:rgba(45,212,191,.75); }
+  #nurses .fx-orb{ background:radial-gradient(circle, rgba(20,184,166,.24), transparent 70%); }
+  #nurses .fx-orb.r{ background:radial-gradient(circle, rgba(16,185,129,.22), transparent 70%); }
+  #nurses .fx-cross{ color:#0d9488; }
+
+  /* ---------- C: animated icons (each loops softly once its card has appeared) ---------- */
+  .feature-icon svg{ overflow:visible; transform-box:fill-box; transform-origin:center; }
+  html.fx #hospitals .feature-card.fx-in:nth-child(1) .feature-icon svg{ animation:fxBolt 3.4s ease-in-out infinite; }
+  html.fx #hospitals .feature-card.fx-in:nth-child(2) .feature-icon svg path:last-child{ stroke-dasharray:10; animation:fxTick 3.6s ease-in-out infinite; }
+  html.fx #hospitals .feature-card.fx-in:nth-child(3) .feature-icon svg{ animation:fxNudge 2.4s ease-in-out infinite; }
+  html.fx #hospitals .feature-card.fx-in:nth-child(4) .feature-icon svg path:first-child{ stroke-dasharray:10; animation:fxTick 3.6s ease-in-out .6s infinite; }
+  html.fx #nurses .feature-card.fx-in:nth-child(1) .feature-icon svg{ animation:fxSpin 16s linear infinite; }
+  html.fx #nurses .feature-card.fx-in:nth-child(2) .feature-icon svg{ animation:fxBob 2.8s ease-in-out infinite; }
+  html.fx #nurses .feature-card.fx-in:nth-child(3) .feature-icon svg{ animation:fxBuzz 3.6s ease-in-out infinite; }
+  @keyframes fxBolt{ 0%,80%,100%{ transform:none; filter:none; } 84%{ opacity:.35; } 90%{ opacity:1; transform:scale(1.22); filter:drop-shadow(0 0 5px currentColor); } 96%{ transform:scale(1); } }
+  @keyframes fxTick{ 0%{ stroke-dashoffset:10; } 35%,80%{ stroke-dashoffset:0; } 100%{ stroke-dashoffset:-10; } }
+  @keyframes fxNudge{ 0%,100%{ transform:translateX(-2px); } 50%{ transform:translateX(3px); } }
+  @keyframes fxBob{ 0%,100%{ transform:translateY(1px); } 50%{ transform:translateY(-3px); } }
+  @keyframes fxBuzz{ 0%,76%,100%{ transform:rotate(0); } 80%{ transform:rotate(-9deg); } 84%{ transform:rotate(9deg); } 88%{ transform:rotate(-7deg); } 92%{ transform:rotate(6deg); } 96%{ transform:rotate(0); } }
+  @media (prefers-reduced-motion: reduce){ .feature-icon svg, .feature-icon svg path{ animation:none !important; } }
+</style>
 </body></html>
