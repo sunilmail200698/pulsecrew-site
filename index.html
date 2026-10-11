@@ -1703,23 +1703,25 @@
 })();
 </script>
 
-<!-- ===== Hospitals / Nurses sections: own colour identity (B) + animated icons (C). CSS only; no markup, link or handler is touched ===== -->
+<!-- ===== Hospitals / Nurses sections: cyan accent for Nurses (B) + animated icons (C). CSS only; no markup, link or handler is touched ===== -->
 <style id="fx-sections-style">
-  /* ---------- B: Nurses get a teal/emerald identity; Hospitals stay blue ---------- */
-  #nurses.section-tint{ background:radial-gradient(820px 380px at 8% 0%, rgba(20,184,166,.16), transparent 60%), radial-gradient(640px 320px at 100% 100%, rgba(16,185,129,.12), transparent 60%), linear-gradient(180deg,#f0fdfa,#ecfdf5); }
-  #nurses .eyebrow{ color:#0f766e; }
-  #nurses .feature-icon{ background:#ccfbf1; color:#0f766e; }
-  html.fx #nurses .feature-card{ background-image:radial-gradient(300px circle at var(--mx,50%) var(--my,-60%), rgba(20,184,166,.17), transparent 70%); }
-  #nurses .feature-card:hover{ border-color:rgba(13,148,136,.55); }
-  html.fx #nurses .fx-reveal.fx-done.fx-tilting{ box-shadow:0 22px 48px rgba(13,148,136,.22); }
-  html.fx #nurses .feature-card.fx-tilting .feature-icon{ background:#0d9488; color:#fff; }
-  #nurses .btn-primary{ background-image:linear-gradient(135deg,#0f766e 0%,#0d9488 45%,#14b8a6 100%); box-shadow:0 8px 20px rgba(13,148,136,.30); }
-  #nurses .btn-primary:not(:disabled):hover{ box-shadow:0 12px 28px rgba(13,148,136,.45); }
-  #nurses .btn-primary:not(:disabled):active{ box-shadow:0 3px 10px rgba(13,148,136,.28); }
-  #nurses .btn-primary:focus-visible{ outline-color:rgba(45,212,191,.75); }
-  #nurses .fx-orb{ background:radial-gradient(circle, rgba(20,184,166,.24), transparent 70%); }
-  #nurses .fx-orb.r{ background:radial-gradient(circle, rgba(16,185,129,.22), transparent 70%); }
-  #nurses .fx-cross{ color:#0d9488; }
+  /* ---------- B: Nurses get a cyan accent from the site's own blue-to-cyan gradient; Hospitals stay blue. Works in light and dark themes ---------- */
+  #nurses{ --nacc:#0e7490; --nacc-soft:rgba(34,211,238,.18); --nacc-line:rgba(8,145,178,.5); }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #nurses{ --nacc:#67e8f9; --nacc-soft:rgba(34,211,238,.16); --nacc-line:rgba(103,232,249,.45); } }
+  :root[data-theme="dark"] #nurses{ --nacc:#67e8f9; --nacc-soft:rgba(34,211,238,.16); --nacc-line:rgba(103,232,249,.45); }
+  #nurses .eyebrow{ color:var(--nacc); }
+  #nurses .feature-icon{ background:var(--nacc-soft); color:var(--nacc); }
+  html.fx #nurses .feature-card{ background-image:radial-gradient(300px circle at var(--mx,50%) var(--my,-60%), rgba(34,211,238,.18), transparent 70%); }
+  #nurses .feature-card:hover{ border-color:var(--nacc-line); }
+  html.fx #nurses .fx-reveal.fx-done.fx-tilting{ box-shadow:0 22px 48px rgba(8,145,178,.22); }
+  html.fx #nurses .feature-card.fx-tilting .feature-icon{ background:#0891b2; color:#fff; }
+  #nurses .btn-primary{ background-image:linear-gradient(135deg,#2563eb 0%,#0ea5e9 55%,#06b6d4 100%); box-shadow:0 8px 20px rgba(14,165,233,.30); }
+  #nurses .btn-primary:not(:disabled):hover{ box-shadow:0 12px 28px rgba(14,165,233,.45); }
+  #nurses .btn-primary:not(:disabled):active{ box-shadow:0 3px 10px rgba(14,165,233,.28); }
+  #nurses .btn-primary:focus-visible{ outline-color:rgba(103,232,249,.75); }
+  #nurses .fx-orb{ background:radial-gradient(circle, rgba(34,211,238,.20), transparent 70%); }
+  #nurses .fx-orb.r{ background:radial-gradient(circle, rgba(14,165,233,.18), transparent 70%); }
+  #nurses .fx-cross{ color:var(--nacc); }
 
   /* ---------- C: animated icons (each loops softly once its card has appeared) ---------- */
   .feature-icon svg{ overflow:visible; transform-box:fill-box; transform-origin:center; }
