@@ -1557,10 +1557,11 @@
   html.fx .nav-links[data-active="#faq"] a[href="#faq"]::after{ transform:scale(1); }
 
   /* header turns to frosted glass once you scroll */
-  header{ transition:background-color .3s ease, box-shadow .3s ease, backdrop-filter .3s ease; }
+  header{ transition:box-shadow .3s ease; }
   header .nav{ transition:padding .25s ease; }
-  header.fx-scrolled{ background:rgba(255,255,255,.72); -webkit-backdrop-filter:blur(16px) saturate(1.5); backdrop-filter:blur(16px) saturate(1.5);
-    box-shadow:0 1px 0 rgba(15,23,42,.06), 0 12px 34px rgba(15,23,42,.08); }
+  /* header stays solid white over every section (no see-through colour shift); it only gains a shadow */
+  header, header.fx-scrolled{ background:#fff !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
+  header.fx-scrolled{ box-shadow:0 1px 0 rgba(15,23,42,.06), 0 12px 34px rgba(15,23,42,.08); }
   header.fx-scrolled .nav{ padding-block:9px; }
   @media (prefers-reduced-motion: reduce){ .nav-links a::after, header, header .nav{ transition:none !important; } }
 </style>
