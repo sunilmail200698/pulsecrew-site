@@ -1639,4 +1639,61 @@
   }catch(err){}
 })();
 </script>
+
+<!-- ===== Footer polish (additive; footer links, email and phone are not modified) ===== -->
+<style id="fx-footer-style">
+  .fx-foot-mark{ pointer-events:none !important; }
+  footer.fx-foot{ position:relative; overflow:hidden; padding-bottom:0;
+    background:radial-gradient(720px 400px at 88% 0%, rgba(37,99,235,.30), transparent 62%), radial-gradient(540px 340px at 0% 100%, rgba(34,211,238,.13), transparent 60%), linear-gradient(170deg,#081326 0%,#0e2347 62%,#0b1c3a 100%); }
+  footer.fx-foot > .wrap{ position:relative; z-index:1; }
+
+  /* light sweep along the top edge and the divider under the columns */
+  footer.fx-foot::before, footer.fx-foot .footer-grid::after{ content:""; position:absolute; left:0; right:0; height:2px; pointer-events:none;
+    background:linear-gradient(90deg, transparent, #2563eb, #22d3ee, transparent) no-repeat; background-size:26% 100%; background-position:-40% 0; animation:fxFootSweep 7s ease-in-out infinite; }
+  footer.fx-foot::before{ top:0; z-index:2; }
+  footer.fx-foot .footer-grid{ position:relative; }
+  footer.fx-foot .footer-grid::after{ bottom:-1px; animation-delay:-3.5s; }
+  @keyframes fxFootSweep{ 0%{ background-position:-40% 0; } 60%,100%{ background-position:140% 0; } }
+
+  /* links: slide, brighten, little dot */
+  footer .footer-col a, footer .footer-contact a, footer .footer-bottom a{ position:relative; display:inline-block; transition:color .2s ease, transform .25s cubic-bezier(.2,.7,.2,1); }
+  footer .footer-col a:hover, footer .footer-contact a:hover{ color:#93c5fd; transform:translateX(6px); }
+  footer .footer-col a::before, footer .footer-contact a::before{ content:""; position:absolute; left:-12px; top:50%; width:5px; height:5px; margin-top:-2.5px; border-radius:50%;
+    background:#22d3ee; box-shadow:0 0 8px rgba(34,211,238,.8); transform:scale(0); transition:transform .25s ease; }
+  footer .footer-col a:hover::before, footer .footer-contact a:hover::before{ transform:scale(1); }
+  footer .footer-bottom a:hover{ color:#93c5fd; transform:translateY(-2px); }
+  footer.fx-foot .footer-col h4{ background:linear-gradient(90deg,#fff,#93c5fd); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+
+  /* columns animate in */
+  html.fx footer .fx-reveal{ transition-duration:.8s; }
+
+  /* giant watermark: outline that fills with light around the cursor, plus a slow sweep */
+  .fx-foot-mark{ display:block; text-align:center; font-family:var(--fx-head,'Sora',sans-serif); font-weight:800; line-height:.78; letter-spacing:-0.045em; white-space:nowrap;
+    font-size:clamp(3.2rem,15.5vw,14rem); margin-top:clamp(20px,3vw,40px); padding-bottom:0; transform:translateY(16%); user-select:none;
+    color:transparent; -webkit-text-stroke:0;
+    background-image:radial-gradient(260px circle at var(--mx,-999px) var(--my,-999px), rgba(96,165,250,.95), rgba(34,211,238,.35) 55%, transparent 75%), linear-gradient(100deg, transparent 42%, rgba(96,165,250,.40) 50%, transparent 58%), linear-gradient(180deg, rgba(147,197,253,.13), rgba(147,197,253,.03));
+    background-size:100% 100%, 260% 100%, 100% 100%; background-repeat:no-repeat; background-position:0 0, 120% 0, 0 0;
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:fxMarkSweep 9s ease-in-out infinite; }
+  @keyframes fxMarkSweep{ 0%{ background-position:0 0, 120% 0, 0 0; } 70%,100%{ background-position:0 0, -20% 0, 0 0; } }
+
+  @media (prefers-reduced-motion: reduce){ footer.fx-foot::before, footer.fx-foot .footer-grid::after, .fx-foot-mark{ animation:none !important; } }
+</style>
+<script id="fx-footer-script">
+(function(){
+  try{
+    var root=document.documentElement; if(!root.classList.contains('fx')) return;
+    var f=document.querySelector('footer'); if(!f || f.querySelector('.fx-foot-mark')) return;
+    f.classList.add('fx-foot');
+    var m=document.createElement('div'); m.className='fx-foot-mark'; m.setAttribute('aria-hidden','true'); m.textContent='PULSECREW'; f.appendChild(m);
+    if(window.matchMedia && matchMedia('(hover:hover)').matches){
+      f.addEventListener('pointermove',function(e){ var r=m.getBoundingClientRect(); m.style.setProperty('--mx',(e.clientX-r.left)+'px'); m.style.setProperty('--my',(e.clientY-r.top)+'px'); },{passive:true});
+      f.addEventListener('pointerleave',function(){ m.style.setProperty('--mx','-999px'); m.style.setProperty('--my','-999px'); });
+    }
+    var items=Array.prototype.slice.call(f.querySelectorAll('.footer-grid > *, .footer-bottom'));
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('fx-in'); io.unobserve(e.target); } }); },{threshold:.15});
+    items.forEach(function(el,i){ el.classList.add('fx-reveal'); el.style.setProperty('--fx-d',(i*120)+'ms'); io.observe(el); });
+    setTimeout(function(){ items.forEach(function(el){ if(!el.classList.contains('fx-in') && el.getBoundingClientRect().top<innerHeight) el.classList.add('fx-in'); }); },2500);
+  }catch(err){}
+})();
+</script>
 </body></html>
