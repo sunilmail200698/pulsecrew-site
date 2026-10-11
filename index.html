@@ -1352,4 +1352,137 @@
   }catch(err){ document.documentElement.classList.remove('fx'); }
 })();
 </script>
+
+<!-- ===== Immersive effects, part 2: rest of the page (additive; never touches links/buttons/forms) ===== -->
+<style id="fx2-style">
+  .fx-orb, .fx-ring, .fx-spot2, .fx-stats *{ pointer-events:none; }
+  .fx-orb, .fx-ring, .fx-spot2{ pointer-events:none !important; }
+
+  /* ---------- stats band ---------- */
+  section.fx-stats{ position:relative; overflow:hidden; padding-block:clamp(30px,4.5vw,52px); color:#fff;
+    background:linear-gradient(180deg,#0e2347 0%,#0b1a33 100%); border-top:1px solid rgba(255,255,255,.08); }
+  .fx-stats::before{ content:""; position:absolute; inset:0; background:radial-gradient(600px 160px at 50% 0%, rgba(96,165,250,.22), transparent 70%); }
+  .fx-stats-grid{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:20px; text-align:center; }
+  @media (max-width:760px){ .fx-stats-grid{ grid-template-columns:repeat(2,1fr); row-gap:28px; } }
+  .fx-stat b{ display:block; font-family:'Outfit',sans-serif; font-weight:700; font-size:clamp(2rem,3.2vw + 1rem,3rem); line-height:1.1; font-variant-numeric:tabular-nums;
+    background:linear-gradient(90deg,#93c5fd,#22d3ee); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; }
+  .fx-stat span{ display:block; margin-top:8px; font-size:.84rem; font-weight:600; letter-spacing:.03em; color:#bfdbfe; }
+
+  /* ---------- parallax glow orbs behind sections ---------- */
+  .fx-has-orb{ position:relative; overflow:hidden; }
+  .fx-has-orb > .wrap{ position:relative; z-index:1; }
+  .fx-orb{ position:absolute; width:460px; height:460px; border-radius:50%; filter:blur(60px); z-index:0; opacity:.55;
+    background:radial-gradient(circle, rgba(37,99,235,.20), transparent 70%); transform:translate3d(0,var(--oy,0px),0); will-change:transform; }
+  .fx-orb.l{ left:-180px; top:8%; } .fx-orb.r{ right:-180px; bottom:4%; background:radial-gradient(circle, rgba(34,211,238,.18), transparent 70%); }
+
+  /* ---------- card tilt (needs the reveal to have settled first) ---------- */
+  html.fx .fx-reveal.fx-done{ transition:transform .18s ease-out, opacity .3s ease, box-shadow .25s ease, border-color .25s ease; transition-delay:0ms; }
+  html.fx .fx-reveal.fx-done.fx-tilting{ transform:perspective(850px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-6px); box-shadow:0 22px 48px rgba(15,23,42,.16); z-index:2; }
+  html.fx .feature-card.fx-tilting .feature-icon{ background:var(--accent); color:#fff; transition:background .2s ease, color .2s ease; }
+
+  /* ---------- comparison + checklist items check in one by one ---------- */
+  html.fx .compare-list li.fx-reveal, html.fx .check-list li.fx-reveal{ transform:translateX(-18px); }
+  html.fx .compare-list li.fx-reveal.fx-in, html.fx .check-list li.fx-reveal.fx-in{ transform:none; }
+  html.fx .compare-card.new{ box-shadow:0 0 0 1px rgba(96,165,250,.35), 0 18px 50px rgba(37,99,235,.22); }
+
+  /* ---------- how it works: active step ---------- */
+  .step-num{ transition:transform .35s cubic-bezier(.2,.8,.2,1), background .3s ease, box-shadow .3s ease; }
+  .step h3{ transition:color .3s ease; }
+  .step.fx-active .step-num{ background:var(--accent); transform:scale(1.14); box-shadow:0 10px 26px rgba(37,99,235,.45); }
+  .step.fx-active h3{ color:var(--accent); }
+
+  /* ---------- compliance shield ---------- */
+  .shield-wrap{ position:relative; }
+  .shield-wrap svg{ position:relative; z-index:1; filter:drop-shadow(0 22px 40px rgba(37,99,235,.35)); animation:fxShield 5.5s ease-in-out infinite; }
+  @keyframes fxShield{ 50%{ transform:translateY(-10px); } }
+  .fx-ring{ position:absolute; left:50%; top:50%; width:220px; height:220px; margin:-110px 0 0 -110px; border-radius:50%; border:2px solid rgba(37,99,235,.35); animation:fxRipple 3.6s ease-out infinite; }
+  .fx-ring.b{ animation-delay:1.8s; }
+  @keyframes fxRipple{ 0%{ transform:scale(.85); opacity:.9; } 100%{ transform:scale(1.55); opacity:0; } }
+  html.fx .shield-wrap.fx-in svg path:last-of-type{ stroke-dasharray:100; stroke-dashoffset:100; animation:fxDraw 1s .6s ease forwards; }
+  @keyframes fxDraw{ to{ stroke-dashoffset:0; } }
+
+  /* ---------- FAQ ---------- */
+  .faq-item{ transition:border-color .25s ease, box-shadow .25s ease; }
+  .faq-item:hover{ border-color:rgba(37,99,235,.35); }
+  .faq-item[open]{ border-color:rgba(37,99,235,.5); box-shadow:0 14px 34px rgba(37,99,235,.12); }
+  html.fx .faq-item{ interpolate-size:allow-keywords; }
+  html.fx .faq-item::details-content{ block-size:0; overflow:clip; transition:block-size .35s ease, content-visibility .35s ease allow-discrete; }
+  html.fx .faq-item[open]::details-content{ block-size:auto; }
+
+  /* ---------- closing band cursor spotlight ---------- */
+  .fx-spot2{ position:absolute; inset:0; z-index:0; opacity:0; transition:opacity .4s ease;
+    background:radial-gradient(420px circle at var(--sx,50%) var(--sy,50%), rgba(96,165,250,.28), transparent 70%); }
+  .cta-band.fx-hover .fx-spot2{ opacity:1; }
+
+  @media (prefers-reduced-motion: reduce){ .shield-wrap svg, .fx-ring{ animation:none !important; } }
+</style>
+<script id="fx2-script">
+(function(){
+  try{
+    var root=document.documentElement;
+    if(!root.classList.contains('fx')) return;               /* part 1 stood down (reduced motion etc.) */
+    var $=function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+    var hoverOK = window.matchMedia && matchMedia('(hover:hover)').matches;
+
+    /* ---- stats band with counters (figures taken from claims already on this page) ---- */
+    var hero=document.querySelector('.hero');
+    if(hero && !document.querySelector('.fx-stats')){
+      var items=[['<',30,' min','Average shift match time'],['',100,'%','GNC-verified talent'],['',3,'','Critical-care specialties: ICU, OT, ER'],['',1,' flat fee','Per shift, no hidden markups']];
+      var sec=document.createElement('section'); sec.className='fx-stats'; sec.setAttribute('aria-label','PulseCrew at a glance');
+      sec.innerHTML='<div class="wrap fx-stats-grid">'+items.map(function(it){
+        return '<div class="fx-stat"><b data-pre="'+it[0]+'" data-to="'+it[1]+'" data-suf="'+it[2]+'">'+it[0]+it[1]+it[2]+'</b><span>'+it[3]+'</span></div>'; }).join('')+'</div>';
+      hero.parentNode.insertBefore(sec, hero.nextSibling);
+      var cio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) return; cio.unobserve(e.target);
+        $('b',e.target).forEach(function(b){ var to=+b.dataset.to, pre=b.dataset.pre, suf=b.dataset.suf, t0=performance.now();
+          (function tick(t){ var k=Math.min(1,(t-t0)/1500), v=Math.round(to*(1-Math.pow(1-k,3))); b.textContent=pre+v+suf; if(k<1) requestAnimationFrame(tick); })(t0); }); }); },{threshold:.4});
+      cio.observe(sec);
+    }
+
+    /* ---- reveal list items one by one ---- */
+    var li=$('.compare-list li, .check-list li'), seen=new Set();
+    var lio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('fx-in'); lio.unobserve(e.target); } }); },{threshold:.3});
+    $('.compare-list, .check-list').forEach(function(ul){ $('li',ul).forEach(function(l,i){ l.classList.add('fx-reveal'); l.style.setProperty('--fx-d',(250+i*130)+'ms'); lio.observe(l); }); });
+
+    /* ---- mark cards "done" once their reveal has settled, then allow tilt ---- */
+    var dio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting && e.target.classList.contains('fx-in') || e.isIntersecting){
+        var el=e.target; dio.unobserve(el); setTimeout(function(){ el.classList.add('fx-done'); },1300); } }); },{threshold:.12});
+    $('.feature-card, .compare-card').forEach(function(c){ dio.observe(c); });
+    if(hoverOK){
+      document.addEventListener('pointermove',function(e){
+        var c=e.target.closest&&e.target.closest('.feature-card,.compare-card'); if(!c||!c.classList.contains('fx-done')) return;
+        var r=c.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+        c.style.setProperty('--ry',(x*9).toFixed(2)+'deg'); c.style.setProperty('--rx',(-y*9).toFixed(2)+'deg'); c.classList.add('fx-tilting'); },{passive:true});
+      document.addEventListener('pointerout',function(e){ var c=e.target.closest&&e.target.closest('.fx-tilting'); if(c && !(e.relatedTarget&&c.contains(e.relatedTarget))) c.classList.remove('fx-tilting'); });
+    }
+
+    /* ---- how it works: auto-cycling active step, hover to take over ---- */
+    var steps=$('.steps .step');
+    if(steps.length){
+      var cur=-1, paused=false, inView=false, timer=null;
+      var setA=function(i){ cur=i; steps.forEach(function(s,k){ s.classList.toggle('fx-active',k===i); }); };
+      var next=function(){ if(!paused && inView) setA((cur+1)%steps.length); };
+      steps.forEach(function(s,i){ if(hoverOK){ s.addEventListener('pointerenter',function(){ paused=true; setA(i); }); s.addEventListener('pointerleave',function(){ paused=false; }); } });
+      new IntersectionObserver(function(es){ inView=es[0].isIntersecting; if(inView){ if(cur<0) setA(0); if(!timer) timer=setInterval(next,2600); } else { clearInterval(timer); timer=null; } },{threshold:.35}).observe($('.steps')[0]);
+    }
+
+    /* ---- parallax glow orbs behind the content sections ---- */
+    var orbSecs=['hospitals','nurses','about','faq'].map(function(id){ return document.getElementById(id); }).filter(Boolean), orbs=[];
+    orbSecs.forEach(function(s){ s.classList.add('fx-has-orb');
+      ['l','r'].forEach(function(side){ var o=document.createElement('span'); o.className='fx-orb '+side; o.setAttribute('aria-hidden','true'); s.insertBefore(o,s.firstChild); orbs.push({el:o,sec:s,k:side==='l'?-.12:.16}); }); });
+    var oT=false; function orbUpd(){ var h=innerHeight; orbs.forEach(function(o){ var r=o.sec.getBoundingClientRect(); if(r.bottom<-200||r.top>h+200) return; o.el.style.setProperty('--oy',((r.top+r.height/2-h/2)*o.k).toFixed(1)+'px'); }); oT=false; }
+    addEventListener('scroll',function(){ if(!oT){ oT=true; requestAnimationFrame(orbUpd); } },{passive:true}); orbUpd();
+
+    /* ---- compliance shield rings ---- */
+    var sw=$('.shield-wrap')[0]; if(sw){ ['a','b'].forEach(function(c){ var r=document.createElement('span'); r.className='fx-ring '+c; r.setAttribute('aria-hidden','true'); sw.insertBefore(r,sw.firstChild); }); }
+
+    /* ---- closing band spotlight ---- */
+    var cta=$('.cta-band')[0];
+    if(cta && hoverOK){
+      var sp=document.createElement('span'); sp.className='fx-spot2'; sp.setAttribute('aria-hidden','true'); cta.insertBefore(sp,cta.firstChild);
+      cta.addEventListener('pointermove',function(e){ var r=cta.getBoundingClientRect(); cta.style.setProperty('--sx',(e.clientX-r.left)+'px'); cta.style.setProperty('--sy',(e.clientY-r.top)+'px'); cta.classList.add('fx-hover'); },{passive:true});
+      cta.addEventListener('pointerleave',function(){ cta.classList.remove('fx-hover'); });
+    }
+  }catch(err){ /* decorative only: ignore */ }
+})();
+</script>
 </body></html>
