@@ -765,3 +765,8 @@
 #values .feature-card p, #serve .feature-card p{ font-size:.92rem; }
 .about-serve h3{ font-size:1.4rem !important; }
 .about-story .section-head h2{ font-size:clamp(1.9rem,2.4vw + 1rem,2.6rem); }
+
+/* New pages (About, Hospitals, Nurses): section labels sit above their headings, so they must outrank the paragraph text */
+.sub-page .eyebrow{ font-size:1.125rem; font-weight:800; letter-spacing:.14em; }
+.sub-page .eyebrow .live-dot{ width:9px; height:9px; }
+@media (max-width:560px){ .sub-page .eyebrow{ font-size:1rem; letter-spacing:.12em; } }
