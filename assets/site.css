@@ -770,3 +770,13 @@
 .sub-page .eyebrow{ font-size:1.125rem; font-weight:800; letter-spacing:.14em; }
 .sub-page .eyebrow .live-dot{ width:9px; height:9px; }
 @media (max-width:560px){ .sub-page .eyebrow{ font-size:1rem; letter-spacing:.12em; } }
+
+/* Section labels on the new pages: continuously flowing gradient taken from the logo (navy > blue) plus the site's cyan accent */
+.sub-page{ --eb-grad:linear-gradient(90deg,#182c56 0%,#2563eb 30%,#2c8cc6 55%,#22d3ee 80%,#182c56 100%); }
+.sub-page .eyebrow{ background-image:var(--eb-grad); background-size:170% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; animation:ebFlow 6s linear infinite; }
+@keyframes ebFlow{ to{ background-position:-170% 0; } }
+/* on dark surfaces the navy end would vanish, so use the lighter part of the same palette */
+.sub-page .about-mission .eyebrow, .sub-page #compliance .eyebrow, .sub-page .cta-band .eyebrow{ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .sub-page{ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); } }
+:root[data-theme="dark"] .sub-page{ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); }
+@media (prefers-reduced-motion: reduce){ .sub-page .eyebrow{ animation:none; } }
