@@ -14,12 +14,13 @@
       d.innerHTML =
         '<span class="fx-spot"></span><canvas class="fx-net"></canvas>'+
         '<svg class="fx-ecg" viewBox="0 0 1200 180" preserveAspectRatio="none"><defs><linearGradient id="fxEcgGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0"><stop offset="0" stop-color="#1e40af"/><stop offset=".3" stop-color="#2563eb"/><stop offset=".6" stop-color="#60a5fa"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs><path d="M0 100 L330 100 L370 100 L395 60 L420 140 L450 20 L485 165 L515 100 L1200 100"/></svg>'+
+        (hero.getAttribute('data-fx-chips')==='off' ? '' :
         '<span class="fx-chip c1"><i></i>ICU nurse matched</span>'+
         '<span class="fx-chip c2"><i></i>GNC verified</span>'+
         '<span class="fx-chip c3"><i></i>OT shift filled · 12 min</span>'+
         '<span class="fx-chip c4"><i></i>ER cover confirmed</span>'+
         '<span class="fx-chip c5"><i></i>Live matching</span>'+
-        '<span class="fx-hint">'+((window.matchMedia&&matchMedia('(hover:none)').matches)?'Tap anywhere to send a shift':'Move your cursor · click to send a shift')+'</span>';
+        '<span class="fx-hint">'+((window.matchMedia&&matchMedia('(hover:none)').matches)?'Tap anywhere to send a shift':'Move your cursor · click to send a shift')+'</span>');
       hero.insertBefore(d, hero.firstChild);
       hero.classList.add('fx-dark');
       canvas = d.querySelector('canvas');
@@ -148,7 +149,7 @@
 
     /* ---- stats band with counters (figures taken from claims already on this page) ---- */
     var hero=document.querySelector('.hero');
-    if(hero && !document.querySelector('.fx-stats')){
+    if(hero && hero.getAttribute('data-fx-stats')!=='off' && !document.querySelector('.fx-stats')){
       var items=[['<',30,' min','Average shift match time'],['',100,'%','GNC-verified talent'],['',3,'','Critical-care specialties: ICU, OT, ER'],['',1,' flat fee','Per shift, no hidden markups']];
       var sec=document.createElement('section'); sec.className='fx-stats'; sec.setAttribute('aria-label','PulseCrew at a glance');
       sec.innerHTML='<div class="wrap fx-stats-grid">'+items.map(function(it){
