@@ -1151,10 +1151,10 @@
   @keyframes fxHint{ 50%{ opacity:.45; } }
   .fx-net{ position:absolute; inset:0; width:100%; height:100%; display:block; }
   .fx-ecg{ position:absolute; left:0; right:0; bottom:14px; width:100%; height:110px; opacity:.85;
-    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 84%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 84%,transparent 100%); }
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%); mask-image:linear-gradient(90deg,transparent 0,#000 8%); }  /* soft start on the left only; the line runs fully to the right edge */
   .fx-ecg path{ fill:none; stroke:url(#fxEcgGrad); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round;
-    stroke-dasharray:1400; stroke-dashoffset:1400; animation:fxEcg 6s linear infinite; filter:drop-shadow(0 0 7px rgba(96,165,250,.8)); }
-  @keyframes fxEcg{ 0%{stroke-dashoffset:1400} 90%,100%{stroke-dashoffset:0} }
+    stroke-dasharray:1600; stroke-dashoffset:1600; animation:fxEcg 3.8s linear infinite; filter:drop-shadow(0 0 7px rgba(96,165,250,.8)); }
+  @keyframes fxEcg{ 0%{stroke-dashoffset:1600} 94%,100%{stroke-dashoffset:0} }
   /* faint copy of the line stays in place so the restart never leaves an empty gap */
   .fx-ecg .fx-ecg-base{ stroke-dasharray:none; stroke-dashoffset:0; animation:none; opacity:.3; filter:none; }
 
