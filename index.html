@@ -1525,67 +1525,34 @@
   .btn:focus-visible{ outline:3px solid rgba(96,165,250,.7); outline-offset:3px; }
   .btn:disabled{ opacity:.7; cursor:progress; }
 
-  /* header navigation links: underline draws in */
-  .nav-links a{ position:relative; }
-  .nav-links a::after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; border-radius:2px; background:linear-gradient(90deg,var(--accent),#22d3ee);
-    transform:scaleX(0); transform-origin:left; transition:transform .3s cubic-bezier(.2,.7,.2,1); }
-  .nav-links a:hover::after, .nav-links a:focus-visible::after{ transform:scaleX(1); }
-
   @media (prefers-reduced-motion: reduce){
-    .btn, .btn::before, a.btn::after, .nav-links a::after{ transition:none !important; }
+    .btn, .btn::before, a.btn::after{ transition:none !important; }
     .btn:not(:disabled):hover, .btn:not(:disabled):active{ transform:none !important; }
   }
 </style>
 
-<!-- ===== Header navigation polish v2: dot indicator + frosted header (links themselves are not modified) ===== -->
-<style id="fx-nav-style">
-  /* hover colour + glowing dot under the link (replaces the underline) */
-  .nav-links a{ position:relative; transition:color .2s ease; }
-  .nav-links a::after{ content:""; left:50%; right:auto; bottom:-11px; width:6px; height:6px; margin-left:-3px; border-radius:50%; transform:scale(0);
-    background:radial-gradient(circle at 35% 35%,#7dd3fc,var(--accent)); box-shadow:0 0 10px rgba(37,99,235,.65);
-    transition:transform .35s cubic-bezier(.3,1.6,.5,1); }
-  .nav-links a:hover::after, .nav-links a:focus-visible::after{ transform:scale(1); }
-  html.fx .nav-links[data-active="#top"] a[href="#top"],
-  html.fx .nav-links[data-active="#hospitals"] a[href="#hospitals"],
-  html.fx .nav-links[data-active="#nurses"] a[href="#nurses"],
-  html.fx .nav-links[data-active="#about"] a[href="#about"],
-  html.fx .nav-links[data-active="#faq"] a[href="#faq"]{ color:var(--accent); }
-  html.fx .nav-links[data-active="#top"] a[href="#top"]::after,
-  html.fx .nav-links[data-active="#hospitals"] a[href="#hospitals"]::after,
-  html.fx .nav-links[data-active="#nurses"] a[href="#nurses"]::after,
-  html.fx .nav-links[data-active="#about"] a[href="#about"]::after,
-  html.fx .nav-links[data-active="#faq"] a[href="#faq"]::after{ transform:scale(1); }
 
-  /* header turns to frosted glass once you scroll */
-  header{ transition:box-shadow .3s ease; }
-  header .nav{ transition:padding .25s ease; }
-  /* header stays solid white over every section (no see-through colour shift); it only gains a shadow */
-  header, header.fx-scrolled{ background:#fff !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
-  header.fx-scrolled{ box-shadow:0 1px 0 rgba(15,23,42,.06), 0 12px 34px rgba(15,23,42,.08); }
-  header.fx-scrolled .nav{ padding-block:9px; }
-  @media (prefers-reduced-motion: reduce){ .nav-links a::after, header, header .nav{ transition:none !important; } }
+<!-- ===== Header effect: heartbeat motif (CSS only; header keeps its original look, links untouched) ===== -->
+<style id="fx-header">
+  /* tiny ECG line draws itself under a nav link on hover */
+  .nav-links a{ position:relative; transition:color .2s ease, transform .2s ease; }
+  .nav-links a::after{ content:""; position:absolute; left:-2px; right:-2px; bottom:-9px; height:8px; pointer-events:none;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 8' preserveAspectRatio='none'%3E%3Cpath d='M0 5H17L21 5L24 1L28 7L31 3L34 5H60' fill='none' stroke='%232563eb' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+    clip-path:inset(0 100% 0 0); transition:clip-path .45s cubic-bezier(.3,.7,.2,1); }
+  .nav-links a:hover, .nav-links a:focus-visible{ transform:translateY(-1px); }
+  .nav-links a:hover::after, .nav-links a:focus-visible::after{ clip-path:inset(0 0 0 0); }
+
+  /* a soft pulse of light travels along the header's bottom edge */
+  header::after{ content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; pointer-events:none; opacity:.85;
+    background:linear-gradient(90deg, transparent, #2563eb, #22d3ee, transparent) no-repeat; background-size:28% 100%; background-position:-40% 0;
+    animation:fxEdge 7s ease-in-out infinite; }
+  @keyframes fxEdge{ 0%{ background-position:-40% 0; } 55%,100%{ background-position:140% 0; } }
+
+  /* logo icon beats on hover */
+  header .logo-icon{ transform-origin:50% 55%; }
+  header .logo:hover .logo-icon{ animation:fxBeat .9s ease-in-out; }
+  @keyframes fxBeat{ 0%,100%{ transform:scale(1); } 15%{ transform:scale(1.14); } 30%{ transform:scale(.97); } 45%{ transform:scale(1.1); } 70%{ transform:scale(1); } }
+
+  @media (prefers-reduced-motion: reduce){ header::after, header .logo:hover .logo-icon{ animation:none; } .nav-links a, .nav-links a::after{ transition:none; } }
 </style>
-<script id="fx-nav-script">
-(function(){
-  try{
-    var root=document.documentElement; if(!root.classList.contains('fx')) return;
-    var nav=document.querySelector('.nav-links'), header=document.querySelector('header'); if(!nav) return;
-    var links=Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]')), active=null, tick=false;
-    function target(a){ var id=a.getAttribute('href'); return id==='#top' ? document.querySelector('.hero') : document.querySelector(id); }
-    function spy(){
-      tick=false;
-      if(header) header.classList.toggle('fx-scrolled', scrollY>24);
-      var cur=null;
-      if(!document.body.classList.contains('page-active')){
-        links.forEach(function(a){ var t=target(a); if(t && t.getBoundingClientRect().top<=170) cur=a; });
-        if(!cur && scrollY<400) cur=links[0];
-      }
-      if(cur!==active){ active=cur; if(cur) nav.setAttribute('data-active',cur.getAttribute('href')); else nav.removeAttribute('data-active'); }
-    }
-    addEventListener('scroll',function(){ if(!tick){ tick=true; requestAnimationFrame(spy); } },{passive:true});
-    document.addEventListener('click',function(){ setTimeout(spy,60); setTimeout(spy,700); });
-    spy();
-  }catch(err){}
-})();
-</script>
 </body></html>
