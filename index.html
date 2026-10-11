@@ -1150,13 +1150,10 @@
   .fx-hint.gone{ opacity:0; animation:none; }
   @keyframes fxHint{ 50%{ opacity:.45; } }
   .fx-net{ position:absolute; inset:0; width:100%; height:100%; display:block; }
-  /* endless ECG monitor trace: a repeating heartbeat scrolls across the hero, edges fade out */
-  .fx-ecgwrap{ position:absolute; left:0; right:0; bottom:14px; height:110px; overflow:hidden; opacity:.6;
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent); mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent); }
-  .fx-ecg{ display:block; width:200%; max-width:none; height:100%; animation:fxEcgScroll 10s linear infinite; will-change:transform; }
-  .fx-ecg path{ fill:none; stroke:#60a5fa; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke;
-    filter:drop-shadow(0 0 7px rgba(96,165,250,.8)); }
-  @keyframes fxEcgScroll{ to{ transform:translateX(-50%); } }
+  .fx-ecg{ position:absolute; left:0; right:0; bottom:14px; width:100%; height:110px; opacity:.55; }
+  .fx-ecg path{ fill:none; stroke:#60a5fa; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:1400; stroke-dashoffset:1400; animation:fxEcg 5.5s linear infinite; filter:drop-shadow(0 0 7px rgba(96,165,250,.8)); }
+  @keyframes fxEcg{ 0%{stroke-dashoffset:1400} 55%{stroke-dashoffset:0} 100%{stroke-dashoffset:-1400} }
 
   /* floating status chips (wide screens only) */
   .fx-chip{ position:absolute; display:flex; align-items:center; gap:8px; padding:9px 14px; border-radius:var(--radius-pill);
@@ -1209,7 +1206,8 @@
   html.fx.fx-go .hero-grid > *{ opacity:1; transform:none; transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); transition-delay:calc(var(--i,0) * 120ms); }
 
   @media (prefers-reduced-motion: reduce){
-    .fx-ecg, .fx-chip, .fx-chip i{ animation:none !important; }
+    .fx-ecg path, .fx-chip, .fx-chip i{ animation:none !important; }
+    .fx-ecg path{ stroke-dashoffset:0; }
     .feature-card, .compare-card, .step{ transition:none; }
   }
 </style>
@@ -1228,7 +1226,7 @@
       var d = document.createElement('div'); d.className='fx-deco'; d.setAttribute('aria-hidden','true');
       d.innerHTML =
         '<span class="fx-spot"></span><canvas class="fx-net"></canvas>'+
-        '<div class="fx-ecgwrap"><svg class="fx-ecg" viewBox="0 0 2400 180" preserveAspectRatio="none"><path d="M0 100 L120 100 L135 88 L150 100 L185 100 L200 60 L222 148 L245 14 L270 170 L292 100 L330 100 L345 90 L360 100 L400 100 L520 100 L535 88 L550 100 L585 100 L600 60 L622 148 L645 14 L670 170 L692 100 L730 100 L745 90 L760 100 L800 100 L920 100 L935 88 L950 100 L985 100 L1000 60 L1022 148 L1045 14 L1070 170 L1092 100 L1130 100 L1145 90 L1160 100 L1200 100 L1320 100 L1335 88 L1350 100 L1385 100 L1400 60 L1422 148 L1445 14 L1470 170 L1492 100 L1530 100 L1545 90 L1560 100 L1600 100 L1720 100 L1735 88 L1750 100 L1785 100 L1800 60 L1822 148 L1845 14 L1870 170 L1892 100 L1930 100 L1945 90 L1960 100 L2000 100 L2120 100 L2135 88 L2150 100 L2185 100 L2200 60 L2222 148 L2245 14 L2270 170 L2292 100 L2330 100 L2345 90 L2360 100 L2400 100"/></svg></div>'+
+        '<svg class="fx-ecg" viewBox="0 0 1200 180" preserveAspectRatio="none"><path d="M0 100 L330 100 L370 100 L395 60 L420 140 L450 20 L485 165 L515 100 L1200 100"/></svg>'+
         '<span class="fx-chip c1"><i></i>ICU nurse matched</span>'+
         '<span class="fx-chip c2"><i></i>GNC verified</span>'+
         '<span class="fx-chip c3"><i></i>OT shift filled · 12 min</span>'+
