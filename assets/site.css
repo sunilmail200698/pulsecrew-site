@@ -741,16 +741,16 @@
 .about-mission{ position:relative; overflow:hidden; color:#e2e8f0;
   background:radial-gradient(760px 420px at 90% 0%, rgba(37,99,235,.34), transparent 62%), radial-gradient(560px 380px at 0% 100%, rgba(34,211,238,.16), transparent 60%), linear-gradient(165deg,#081326 0%,#0e2347 60%,#102b52 100%); }
 .about-mission .eyebrow{ color:#93c5fd; }
-.about-mission-text{ margin-top:18px; max-width:30ch; font-family:var(--fx-head,'Sora',sans-serif); font-weight:700; font-size:clamp(1.7rem,3.2vw + .6rem,3.1rem); line-height:1.18; letter-spacing:-0.03em; color:#fff; }
+.about-mission-text{ margin-top:18px; max-width:44ch; font-family:var(--fx-head,'Sora',sans-serif); font-weight:700; font-size:clamp(1.35rem,1.5vw + .85rem,2rem); line-height:1.3; letter-spacing:-0.02em; color:#fff; }
 .about-mission-text .accent{ background:linear-gradient(90deg,#60a5fa,#22d3ee); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; }
 .about-mission-points{ margin-top:clamp(32px,4vw,52px); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(20px,3vw,36px); padding-top:28px; border-top:1px solid rgba(255,255,255,.14); }
 @media (max-width:760px){ .about-mission-points{ grid-template-columns:1fr; } }
-.about-mission-points b{ display:block; color:#fff; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; font-weight:800; }
-.about-mission-points span{ display:block; margin-top:8px; color:#cbd5e1; font-size:.95rem; }
+.about-mission-points b{ display:block; color:#fff; font-family:var(--fx-head,'Sora',sans-serif); font-size:1.25rem; letter-spacing:-0.01em; font-weight:700; }
+.about-mission-points span{ display:block; margin-top:8px; color:#cbd5e1; font-size:.92rem; }
 .about-principles{ margin-top:44px; max-width:860px; margin-inline:auto; display:flex; flex-direction:column; gap:14px; }
 .about-principle{ display:flex; gap:22px; align-items:flex-start; padding:22px 26px; border:1px solid var(--border-soft); border-radius:var(--radius-card); background:var(--surface); transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
-.about-principle h3{ font-size:1.05rem; font-weight:700; }
-.about-principle p{ margin-top:6px; font-size:.93rem; color:var(--ink-soft); }
+.about-principle h3{ font-size:1.3rem; font-weight:700; letter-spacing:-0.015em; }
+.about-principle p{ margin-top:6px; font-size:.92rem; color:var(--ink-soft); }
 .about-principle-mark{ flex:none; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--fx-head,'Sora',sans-serif); font-weight:700; color:#fff; background:linear-gradient(135deg,#2563eb,#22d3ee); }
 @media (hover:hover){ .about-principle:hover{ transform:translateX(6px); border-color:rgba(37,99,235,.45); box-shadow:0 14px 34px rgba(37,99,235,.12); } }
 .about-serve{ display:flex; flex-direction:column; text-decoration:none; color:inherit; }
@@ -759,3 +759,9 @@
 .about-serve-link{ margin-top:18px; font-weight:700; font-size:.9rem; color:var(--accent); }
 .about-serve-link::after{ content:" \2192"; display:inline-block; transition:transform .25s ease; }
 .about-serve:hover .about-serve-link::after{ transform:translateX(5px); }
+
+/* About page: card titles clearly larger than their body text */
+#values .feature-card h3, #serve .feature-card h3{ font-size:1.3rem; letter-spacing:-0.015em; }
+#values .feature-card p, #serve .feature-card p{ font-size:.92rem; }
+.about-serve h3{ font-size:1.4rem !important; }
+.about-story .section-head h2{ font-size:clamp(1.9rem,2.4vw + 1rem,2.6rem); }
