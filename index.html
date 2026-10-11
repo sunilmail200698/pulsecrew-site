@@ -1622,7 +1622,7 @@
     if(window.matchMedia && matchMedia('(hover:hover)').matches){
       var g=document.createElement('div'); g.className='fx-glow-cursor'; g.setAttribute('aria-hidden','true'); document.body.appendChild(g);
       var tx=0,ty=0,x=0,y=0,run=false;
-      function loop(){ x+=(tx-x)*.14; y+=(ty-y)*.14; g.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px)'; if(Math.abs(tx-x)>.3||Math.abs(ty-y)>.3) requestAnimationFrame(loop); else run=false; }
+      function loop(){ x+=(tx-x)*.65; y+=(ty-y)*.65; g.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px)'; if(Math.abs(tx-x)>.3||Math.abs(ty-y)>.3) requestAnimationFrame(loop); else run=false; }
       document.addEventListener('pointermove',function(e){ tx=e.clientX; ty=e.clientY; g.classList.add('on'); if(!run){ run=true; requestAnimationFrame(loop); } },{passive:true});
       document.addEventListener('pointerleave',function(){ g.classList.remove('on'); });
     }
