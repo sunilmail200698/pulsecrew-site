@@ -1,4 +1,13 @@
 /* PulseCrew shared immersive effects. Every effect is purely visual and never touches links, buttons or forms. */
+
+/* Always open a page at its top (unless the link targets a section): stop the browser/frame from restoring the previous page's scroll position */
+(function(){
+  try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
+  function top(){ if(location.hash) return; window.scrollTo(0,0); document.documentElement.scrollTop=0; if(document.body) document.body.scrollTop=0; }
+  top();
+  window.addEventListener('load', function(){ top(); setTimeout(top,60); setTimeout(top,350); });
+  window.addEventListener('pageshow', function(e){ if(e.persisted) top(); });
+})();
 (function(){
   try{
     var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
