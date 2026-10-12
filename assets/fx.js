@@ -5,6 +5,14 @@
     var root = document.documentElement;
     var hero = document.querySelector('.hero');
 
+    /* wrap the hero badge's text so a gradient can be applied to the text only (the pill's own background is untouched) */
+    var bc = hero && hero.querySelector('.badge-chip');
+    if (bc && !bc.querySelector('.badge-text')){
+      Array.prototype.slice.call(bc.childNodes).forEach(function(n){
+        if (n.nodeType===3 && n.textContent.trim()){ var sp=document.createElement('span'); sp.className='badge-text'; n.parentNode.insertBefore(sp,n); sp.appendChild(n); }
+      });
+    }
+
     if (reduce || !('IntersectionObserver' in window)) return;   /* no motion: page stays exactly as it was */
 
     /* ---- hero layer: network canvas, ECG line, chips ---- */

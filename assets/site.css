@@ -766,17 +766,21 @@
 .about-serve h3{ font-size:1.4rem !important; }
 .about-story .section-head h2{ font-size:clamp(1.9rem,2.4vw + 1rem,2.6rem); }
 
-/* New pages (About, Hospitals, Nurses): section labels sit above their headings, so they must outrank the paragraph text */
-.sub-page .eyebrow{ font-size:1.125rem; font-weight:800; letter-spacing:.14em; }
-.sub-page .eyebrow .live-dot{ width:9px; height:9px; }
-@media (max-width:560px){ .sub-page .eyebrow{ font-size:1rem; letter-spacing:.12em; } }
+/* Section labels (all pages): they sit above their headings, so they must outrank the paragraph text */
+body .eyebrow{ font-size:1.125rem; font-weight:800; letter-spacing:.14em; }
+.eyebrow .live-dot{ width:9px; height:9px; }
+@media (max-width:560px){ .eyebrow{ font-size:1rem; letter-spacing:.12em; } }
 
 /* Section labels on the new pages: continuously flowing gradient taken from the logo (navy > blue) plus the site's cyan accent */
-.sub-page{ --eb-grad:linear-gradient(90deg,#182c56 0%,#2563eb 30%,#2c8cc6 55%,#22d3ee 80%,#182c56 100%); }
-.sub-page .eyebrow{ background-image:var(--eb-grad); background-size:170% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; animation:ebFlow 6s linear infinite; }
+:root{ --eb-grad:linear-gradient(90deg,#182c56 0%,#2563eb 30%,#2c8cc6 55%,#22d3ee 80%,#182c56 100%); }
+body .eyebrow{ background-image:var(--eb-grad); background-size:170% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; animation:ebFlow 6s linear infinite; }
 @keyframes ebFlow{ to{ background-position:-170% 0; } }
 /* on dark surfaces the navy end would vanish, so use the lighter part of the same palette */
-.sub-page .about-mission .eyebrow, .sub-page #compliance .eyebrow, .sub-page .cta-band .eyebrow{ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .sub-page{ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); } }
-:root[data-theme="dark"] .sub-page{ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); }
-@media (prefers-reduced-motion: reduce){ .sub-page .eyebrow{ animation:none; } }
+.about-mission .eyebrow, #compliance .eyebrow, .cta-band .eyebrow{ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); } }
+:root[data-theme="dark"]{ --eb-grad:linear-gradient(90deg,#60a5fa 0%,#22d3ee 30%,#bfdbfe 55%,#38bdf8 80%,#60a5fa 100%); }
+@media (prefers-reduced-motion: reduce){ .eyebrow{ animation:none; } }
+
+/* Hero pill badges (FOR HOSPITALS / FOR NURSES / ABOUT / LIVE...): same flowing gradient on the text only; the pill keeps its own background */
+.hero .badge-chip .badge-text{ background-image:linear-gradient(90deg,#93c5fd 0%,#22d3ee 28%,#e0f2fe 52%,#38bdf8 76%,#93c5fd 100%); background-size:170% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; animation:ebFlow 6s linear infinite; }
+@media (prefers-reduced-motion: reduce){ .hero .badge-chip .badge-text{ animation:none; } }
