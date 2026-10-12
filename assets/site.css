@@ -784,3 +784,17 @@ body .eyebrow{ background-image:var(--eb-grad); background-size:170% 100%; -webk
 /* Hero pill badges (FOR HOSPITALS / FOR NURSES / ABOUT / LIVE...): same flowing gradient on the text only; the pill keeps its own background */
 .hero .badge-chip .badge-text{ background-image:linear-gradient(90deg,#93c5fd 0%,#22d3ee 28%,#e0f2fe 52%,#38bdf8 76%,#93c5fd 100%); background-size:170% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; animation:ebFlow 6s linear infinite; }
 @media (prefers-reduced-motion: reduce){ .hero .badge-chip .badge-text{ animation:none; } }
+
+/* ---------- Titles: bigger on every page so headings clearly stand apart from body text ---------- */
+body .section-head h2, body #compliance h2{ font-size:clamp(2.1rem,2.8vw + 1rem,3.1rem) !important; line-height:1.12; letter-spacing:-0.03em; }
+body .cta-band h2{ font-size:clamp(2.2rem,3vw + 1rem,3.2rem); }
+body .about-story .section-head h2{ font-size:clamp(2.1rem,2.8vw + 1rem,3.1rem); }
+body .feature-card h3, body .compare-card h3, body .step h3, body #values .feature-card h3, body #serve .feature-card h3, body .about-principle h3{ font-size:1.35rem; line-height:1.25; letter-spacing:-0.02em; }
+body .about-serve h3{ font-size:1.5rem !important; }
+body .faq-item summary{ font-size:1.15rem; }
+body .section-head p, body .feature-card p, body .step p, body .compare-list li, body .faq-item p{ font-size:.95rem; }
+body .section-head p{ font-size:1.02rem; }
+@media (max-width:560px){
+  body .section-head h2, body #compliance h2, body .about-story .section-head h2{ font-size:clamp(1.85rem,7vw,2.3rem) !important; }
+  body .feature-card h3, body .compare-card h3, body .step h3, body #values .feature-card h3, body .about-principle h3{ font-size:1.2rem; }
+}
