@@ -286,6 +286,20 @@
   .time-select-group{ display:flex; gap:8px; }
   .time-select-group select{ flex:1; min-width:0; }
 
+  /* Number of nurses required (hospital form): [ - ] 1 [ + ] */
+  .qty-stepper{ display:flex; align-items:stretch; border:1px solid var(--border); border-radius:12px; background:var(--surface); overflow:hidden; transition:border-color .15s ease, box-shadow .15s ease; }
+  .qty-stepper:focus-within{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .field .qty-stepper input[type="number"]{ flex:1; min-width:0; width:100%; border:0; border-radius:0; box-shadow:none; background:transparent; text-align:center; font-weight:800; font-size:1.05rem; padding:11px 6px; cursor:default; }
+  .qty-btn{ display:flex; align-items:center; justify-content:center; flex:0 0 52px; padding:0; margin:0; border:0; background:var(--accent-soft); color:var(--accent); cursor:pointer; -webkit-tap-highlight-color:transparent; transition:background-color .15s ease, opacity .15s ease; }
+  .qty-btn[data-qty="down"]{ border-right:1px solid var(--border); }
+  .qty-btn[data-qty="up"]{ border-left:1px solid var(--border); }
+  .qty-btn svg{ width:14px; height:14px; pointer-events:none; }
+  .qty-btn:hover{ background:var(--accent-soft-2); }
+  .qty-btn:active{ opacity:.65; }
+  .qty-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:-3px; }
+  .qty-btn[aria-disabled="true"]{ opacity:.35; cursor:not-allowed; }
+  .qty-btn[aria-disabled="true"]:hover{ background:var(--accent-soft); }
+
   /* ---------- Dedicated form pages ---------- */
   .site-page{ display:none; }
   .site-page.active{ display:block; }
