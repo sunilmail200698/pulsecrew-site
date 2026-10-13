@@ -379,9 +379,17 @@
             <option value="OT">OT</option>
           </select>
         </div>
-        <div class="field wide">
+        <div class="field">
           <label for="hospitalWard">Ward</label>
           <input type="text" id="hospitalWard" name="ward" maxlength="100" placeholder="e.g. ICU, Ward 3B, Maternity" required>
+        </div>
+        <div class="field">
+          <label for="nursesRequired">Number of nurses required</label>
+          <div class="qty-stepper" role="group" aria-label="Number of nurses required, 1 to 10">
+            <button type="button" class="qty-btn" data-qty="down" aria-label="Fewer nurses"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 6h8"/></svg></button>
+            <input type="number" id="nursesRequired" name="nursesRequired" value="1" min="1" max="10" step="1" inputmode="numeric" readonly required>
+            <button type="button" class="qty-btn" data-qty="up" aria-label="More nurses"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 6h8M6 2v8"/></svg></button>
+          </div>
         </div>
         <div class="field">
           <label for="shiftDate">Shift date</label>
@@ -738,6 +746,42 @@
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.focus();
     });
+  });
+})();
+</script>
+
+<script>
+// Number of nurses required (hospital form): the - and + buttons move the number between 1 and 10 and stop at both ends.
+(function(){
+  var MIN = 1, MAX = 10;
+  Array.prototype.forEach.call(document.querySelectorAll('.qty-stepper'), function (box){
+    var input = box.querySelector('input');
+    var down = box.querySelector('[data-qty="down"]');
+    var up = box.querySelector('[data-qty="up"]');
+    if (!input || !down || !up) return;
+
+    function current(){
+      var n = parseInt(input.value, 10);
+      return isNaN(n) ? MIN : Math.max(MIN, Math.min(MAX, n));
+    }
+    function sync(){
+      var n = current();
+      down.setAttribute('aria-disabled', n <= MIN ? 'true' : 'false');
+      up.setAttribute('aria-disabled', n >= MAX ? 'true' : 'false');
+    }
+    function set(n){
+      input.value = String(Math.max(MIN, Math.min(MAX, n)));
+      sync();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    down.addEventListener('click', function (){ set(current() - 1); });
+    up.addEventListener('click', function (){ set(current() + 1); });
+    input.addEventListener('keydown', function (ev){
+      if (ev.key === 'ArrowUp' || ev.key === '+') { ev.preventDefault(); set(current() + 1); }
+      else if (ev.key === 'ArrowDown' || ev.key === '-') { ev.preventDefault(); set(current() - 1); }
+    });
+    if (input.form) input.form.addEventListener('reset', function (){ setTimeout(sync, 0); });   // after a successful submit the form resets to 1
+    sync();
   });
 })();
 </script>
