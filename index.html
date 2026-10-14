@@ -668,6 +668,7 @@
 <script>
 (function(){
   var API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzmwKiKaiTpiR_P6bliRnGABBkUDQKBbBesYBgfy0EW1lpgIDiPDcuzaf9Nk0ZOoic9CA/exec';
+  window.PULSECREW_API = API_ENDPOINT;   // the script below that loads the specialty list uses the same address
 
   function composeTimeIn(form, hourId, minuteId, ampmId){
     var h = form.querySelector('#' + hourId);
@@ -783,6 +784,47 @@
     if (input.form) input.form.addEventListener('reset', function (){ setTimeout(sync, 0); });   // after a successful submit the form resets to 1
     sync();
   });
+})();
+</script>
+<script>
+// Specialty choices (nurse form "Specialty", hospital form "Type of nurse required"): loaded from the portal's list when the page opens.
+// The five options already in the page stay if the list cannot be loaded (offline, slow, blocked), so the forms always work.
+(function(){
+  var api = window.PULSECREW_API;
+  if (!api || !window.fetch) return;
+  var selects = ['specialty', 'typeOfNurseRequired'].map(function (id){ return document.getElementById(id); }).filter(Boolean);
+  if (!selects.length) return;
+
+  var controller = window.AbortController ? new AbortController() : null;
+  var timer = controller ? setTimeout(function (){ controller.abort(); }, 10000) : 0;
+
+  try {
+  fetch(api + '?action=lists', controller ? { signal: controller.signal } : {})
+    .then(function (res){ return res.json(); })
+    .then(function (data){
+      if (!data || data.ok !== true || !Array.isArray(data.specialties)) return;
+      var names = [];
+      data.specialties.forEach(function (n){
+        if (typeof n !== 'string') return;
+        n = n.trim();
+        if (n && n.length <= 60 && names.indexOf(n) === -1) names.push(n);
+      });
+      if (!names.length) return;
+      selects.forEach(function (sel){
+        var chosen = sel.value;
+        while (sel.options.length > 1) sel.remove(1);   // option 0 is the "Select ..." line
+        names.forEach(function (n){
+          var o = document.createElement('option');
+          o.value = n;
+          o.textContent = n;
+          sel.appendChild(o);
+        });
+        sel.value = names.indexOf(chosen) !== -1 ? chosen : '';
+      });
+    })
+    .catch(function (){ /* keep the options already in the page */ })
+    .then(function (){ if (timer) clearTimeout(timer); });
+  } catch (err) { if (timer) clearTimeout(timer); }   // a browser that refuses to even start the request: keep the page's options
 })();
 </script>
 <script src="assets/fx.js"></script>
