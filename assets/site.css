@@ -812,3 +812,29 @@ body .section-head p{ font-size:1.02rem; }
   body .section-head h2, body #compliance h2, body .about-story .section-head h2{ font-size:clamp(1.85rem,7vw,2.3rem) !important; }
   body .feature-card h3, body .compare-card h3, body .step h3, body #values .feature-card h3, body .about-principle h3{ font-size:1.2rem; }
 }
+
+  /* ---------- Social links (header and footer) ---------- */
+  .social-links{ display:flex; align-items:center; gap:10px; }
+  .social-link{ display:inline-flex; align-items:center; justify-content:center; flex:none; width:40px; height:40px; border-radius:50%;
+    border:1px solid var(--border); color:var(--ink-navy); background:transparent;
+    transition:color .2s ease, border-color .2s ease, background-color .2s ease, transform .2s ease; }
+  .social-link svg{ display:block; }
+  .social-link:hover{ color:var(--accent); border-color:var(--accent); background:var(--accent-soft); transform:translateY(-2px); }
+  .social-link:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .social-links-header{ margin-left:4px; }
+  .social-links-footer{ margin-top:20px; }
+  footer .social-link{ border-color:rgba(255,255,255,.22); color:#cbd5e1; }
+  footer .social-link:hover{ color:#93c5fd; border-color:#93c5fd; background:rgba(147,197,253,.12); }
+  footer .social-link:focus-visible{ outline-color:#93c5fd; }
+  /* on phones the two header buttons are hidden (rules above); the social link stays */
+  @media (max-width:520px){ .nav-cta{ display:flex; } .nav-cta .btn{ display:none; } }
+  @media (prefers-reduced-motion: reduce){ .social-link{ transition:none; } .social-link:hover{ transform:none; } }
+  /* between 901px and 1100px the header is already full: the gaps are tightened by the icon's width, so it is no wider than before */
+  @media (min-width:901px) and (max-width:1100px){
+    .nav{ gap:14px; }
+    .nav-links{ gap:18px; }
+    .nav-cta{ gap:6px; }
+    .social-links-header{ margin-left:0; }
+  }
+  /* between 901px and 1010px the header has no room left at its right end: only the header icon is left out, the footer one stays */
+  @media (min-width:901px) and (max-width:1010px){ .social-links-header{ display:none; } }
