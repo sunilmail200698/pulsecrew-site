@@ -838,3 +838,10 @@ body .section-head p{ font-size:1.02rem; }
   }
   /* between 901px and 1010px the header has no room left at its right end: only the header icon is left out, the footer one stays */
   @media (min-width:901px) and (max-width:1010px){ .social-links-header{ display:none; } }
+
+  /* Facebook and LinkedIn: shown but not linked yet (their addresses are not known); each becomes a normal .social-link <a> when its address is added */
+  .social-link.social-soon{ opacity:.5; cursor:default; }
+  .social-link.social-soon:hover{ transform:none; color:var(--ink-navy); border-color:var(--border); background:transparent; }
+  footer .social-link.social-soon:hover{ color:#cbd5e1; border-color:rgba(255,255,255,.22); background:transparent; }
+  /* the header has room for all three icons only on wide screens; below that it keeps just the Instagram link (the footer always shows all three) */
+  @media (max-width:1199px){ .social-links-header .social-soon{ display:none; } }
